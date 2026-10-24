@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Code Explainer - Understand Code. Learn Faster.</title>
+  <meta name="description" content="A modern developer tool to help beginners understand programming code using AI.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Background Glow Accents -->
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <!-- Header -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">AI Code Explainer</h1>
+          <p class="brand-subtitle">Understand code. Learn faster.</p>
+        </div>
+      </div>
+      <div class="nav-badge" id="navBadge">
+        <span class="badge-dot" id="badgeDot"></span>
+        <span id="badgeText">Step 1: Frontend UI Demo</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-container">
+    <!-- Empty Code Alert Banner (hidden by default) -->
+    <div id="alertBanner" class="alert-banner" role="alert" style="display: none;">
+      <span class="alert-icon">⚠️</span>
+      <span id="alertMessage" class="alert-text">Please enter some code or click "Insert Sample Code" first!</span>
+      <button id="closeAlertBtn" class="alert-close-btn" aria-label="Close notification">&times;</button>
+    </div>
+
+    <!-- Dashboard Grid -->
+    <div class="dashboard-grid">
+      
+      <!-- LEFT PANEL: Code Editor Section -->
+      <section class="card editor-card">
+        <div class="card-header">
+          <div class="header-left">
+            <span class="window-dot red"></span>
+            <span class="window-dot yellow"></span>
+            <span class="window-dot green"></span>
+            <span class="panel-title">Source Code Editor</span>
+          </div>
+
+          <!-- Language Selector -->
+          <div class="header-right">
+            <label for="languageSelect" class="visually-hidden">Programming Language</label>
+            <div class="select-wrapper">
+              <select id="languageSelect" class="language-dropdown">
+                <option value="python" selected>Python</option>
+                <option value="javascript">JavaScript</option>
+                <option value="java">Java</option>
+                <option value="c">C</option>
+                <option value="cpp">C++</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Editor Toolbar -->
+        <div class="editor-toolbar">
+          <button id="sampleCodeBtn" class="btn btn-secondary btn-sm" title="Insert a ready-to-test code example">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            Insert Sample Code
+          </button>
+
+          <button id="clearCodeBtn" class="btn btn-outline-danger btn-sm" title="Clear all text in the editor">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+            Clear
+          </button>
+        </div>
+
+        <!-- Code Input Area -->
+        <div class="editor-container">
+          <div id="lineNumbers" class="line-numbers" aria-hidden="true">1</div>
+          <textarea 
+            id="codeInput" 
+            class="code-textarea" 
+            placeholder="// Paste or type your code here...&#10;// Or click 'Insert Sample Code' above to try it out!"
+            spellcheck="false"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+          ></textarea>
+        </div>
+
+        <!-- Editor Footer -->
+        <div class="editor-footer">
+          <div class="editor-stats">
+            <span id="lineCount">Lines: 1</span>
+            <span class="stat-divider">•</span>
+            <span id="charCount">Chars: 0</span>
+          </div>
+
+          <button id="explainBtn" class="btn btn-primary" title="Generate an explanation for this code">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            Explain Code
+          </button>
+        </div>
+      </section>
+
+      <!-- RIGHT PANEL: Output & Explanation Section -->
+      <section class="card output-card">
+        <div class="card-header">
+          <div class="header-left">
+            <svg class="panel-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <span class="panel-title">AI Explanation & Analysis</span>
+          </div>
+
+          <div class="header-right">
+            <button id="copyExplanationBtn" class="btn btn-secondary btn-sm" title="Copy full explanation to clipboard">
+              <svg id="copyIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span id="copyBtnText">Copy Explanation</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Output Content Area -->
+        <div class="output-content-wrapper">
+          
+          <!-- State 1: Empty / Initial Guide State -->
+          <div id="initialState" class="empty-state">
+            <div class="empty-state-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              </svg>
+            </div>
+            <h3 class="empty-title">Ready for Your Code</h3>
+            <p class="empty-subtitle">Paste code in the left editor and click <strong>"Explain Code"</strong> to see how the explanation sections work.</p>
+            
+            <div class="feature-pills">
+              <div class="pill">💡 Simple Summary</div>
+              <div class="pill">🔍 Line-by-Line</div>
+              <div class="pill">💻 Expected Output</div>
+              <div class="pill">⚠️ Debugging & Tips</div>
+            </div>
+          </div>
+
+          <!-- State 2: Loading Indicator -->
+          <div id="loadingState" class="loading-state" style="display: none;">
+            <div class="spinner"></div>
+            <p class="loading-title">Generating Explanation...</p>
+            <p class="loading-subtitle" id="loadingStep">Parsing code structure and formatting cards</p>
+          </div>
+
+          <!-- State 3: Active Explanation Display -->
+          <div id="resultsState" class="results-container" style="display: none;">
+            
+            <!-- Step 1 Notice Banner -->
+            <div class="demo-banner" id="demoBanner">
+              <div class="demo-banner-header">
+                <span class="demo-badge" id="demoBadge">Frontend Demo Notice</span>
+                <span class="demo-lang" id="resultLanguageTag">Python</span>
+              </div>
+              <p class="demo-banner-text" id="demoBannerText">
+                This is a <strong>Step 1 frontend preview</strong> showing how your explanations will be structured and displayed. No AI backend or paid API is connected yet. In <strong>Step 2</strong>, we will connect a Python backend / AI API to provide live, dynamic explanations for any code you paste!
+              </p>
+            </div>
+
+            <!-- Output Section 1: Simple Code Explanation -->
+            <div class="output-section">
+              <div class="section-badge badge-simple">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                1. Simple Code Explanation
+              </div>
+              <div class="section-body" id="simpleExplanation">
+                <!-- Populated dynamically via JS -->
+              </div>
+            </div>
+
+            <!-- Output Section 2: Line-by-Line Breakdown -->
+            <div class="output-section">
+              <div class="section-badge badge-lines">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="8" y1="6" x2="21" y2="6"></line>
+                  <line x1="8" y1="12" x2="21" y2="12"></line>
+                  <line x1="8" y1="18" x2="21" y2="18"></line>
+                  <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                  <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                  <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+                2. Line-by-Line Breakdown
+              </div>
+              <div class="section-body line-breakdown" id="lineExplanation">
+                <!-- Populated dynamically via JS -->
+              </div>
+            </div>
+
+            <!-- Output Section 3: Example Output -->
+            <div class="output-section">
+              <div class="section-badge badge-output">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="4 17 10 11 4 5"></polyline>
+                  <line x1="12" y1="19" x2="20" y2="19"></line>
+                </svg>
+                3. Example Output (Terminal / Console)
+              </div>
+              <div class="terminal-box" id="exampleOutput">
+                <!-- Populated dynamically via JS -->
+              </div>
+            </div>
+
+            <!-- Output Section 4: Possible Errors & Debugging -->
+            <div class="output-section">
+              <div class="section-badge badge-errors">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+                  <line x1="12" y1="9" x2="12" y2="13"></line>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                4. Possible Errors & Debugging Suggestions
+              </div>
+              <div class="section-body debug-list" id="debugSuggestions">
+                <!-- Populated dynamically via JS -->
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>AI Code Explainer &bull; Step 1 Frontend Prototype &bull; Designed for Engineering Students</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="script.js"></script>
+</body>
+</html>
